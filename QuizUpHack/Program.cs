@@ -36,7 +36,6 @@ namespace QuizUpHack
                 {
                     Console.WriteLine("you did wrong. Believe yourself and try again.");
                 }
-                break;
             } while (true);
 
             do
@@ -44,20 +43,20 @@ namespace QuizUpHack
                 Console.WriteLine("1-Play tournament");
                 Console.WriteLine("2-Play with random opponent");
                 Console.WriteLine("3-Single player");
-                var choice = Console.ReadKey();
+                var choice = Console.ReadLine();
                 Console.WriteLine("");
                 int correctQuestion;
-                switch (choice.KeyChar)
+                switch (choice)
                 {
-                    case '1':
+                    case "1":
                         Console.WriteLine("How many question do you want to solve correctly");
                         correctQuestion = Convert.ToInt32(Console.ReadLine());
                         gamer.PlayTournament("6a8777ce-e43f-482c-a5b7-e36bc8d6251b", slug, correctQuestion);
                         break;
-                    case '2':
+                    case "2":
                         gamer.PlayWithRandomOpponent(slug);
                         break;
-                    case '3':
+                    case "3":
                         Console.WriteLine("How many question do you want to solve correctly");
                         correctQuestion = Convert.ToInt32(Console.ReadLine());
                         gamer.PlaySinglePlayer(slug, correctQuestion);

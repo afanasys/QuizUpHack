@@ -167,7 +167,7 @@ namespace QuizUpHack
                 Console.WriteLine($"My target {correctAnswer}");
                 var limit = correctAnswer / 5;
 
-                for (var i = 1; i < limit; i++)
+                for (var i = 1; i <= limit; i++)
                 {
                     var packCompletedRequest = new PackCompletedRequestModel()
                     {
@@ -176,11 +176,11 @@ namespace QuizUpHack
                     };
                     result = Client.PostAsJsonAsync($"/gamemode/sp/games/{idOfGame}/events/pack_completed", packCompletedRequest).Result;
                     result.EnsureSuccessStatusCode();
-                    result = Client.GetAsync($"/gamemode/sp/games/{idOfGame}/pack?pack={i + 1}").Result;
+                    result = Client.GetAsync($"/gamemode/sp/games/{idOfGame}/pack?pack={i}").Result;
                     result.EnsureSuccessStatusCode();
 
                     waitBoard = new WaitBoard(waitMillisecond + random.Next(1, 2000));
-                    waitBoard.Wait($"Pack {i}");
+                    waitBoard.Wait($"Pack {i} and target question is {i*5}");
                 }
 
                 //var packResponse = result.Content.ReadAsAsync<SinglePlayerGameResponseModel>().Result;
@@ -189,7 +189,7 @@ namespace QuizUpHack
                     //uncomment if you want to give wrong answer instead of empty answer
                     // AnswerId = packResponse.QuestionPack.Questions.FirstOrDefault().Answers.FirstOrDefault(a => a.Id != packResponse.QuestionPack.Questions.FirstOrDefault().CorrectAnswerId).Id.ToString(),
                     AnswerId = "-1",
-                    FailedQuestionNumber = limit
+                    FailedQuestionNumber = correctAnswer    
                 };
                 result = Client.PostAsJsonAsync($"/gamemode/sp/games/{idOfGame}/events/wrong_answer", wrongAnswerRequest).Result;
                 result.EnsureSuccessStatusCode();
@@ -199,8 +199,8 @@ namespace QuizUpHack
                     ? $"You Win! + {gameResultResponse.GameEndedStatus.Game.Xp.Total} XP"
                     : "You Lose, weird?!");
 
-                Console.WriteLine("Press any key for restart!");
-                Console.ReadLine();
+                Console.WriteLine("Go again? How many question I should answer correctly?");
+                correctAnswer =Convert.ToInt32(Console.ReadLine());
             } while (true);
 
         }
